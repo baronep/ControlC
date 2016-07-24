@@ -37,6 +37,7 @@ PID_t *pid_create(float Kp, float Ki, float Kd, float i_lim, float d_filt_gain)
 	pid->i_term = 0.0;
 	pid->err_prev = 0.0;
 	pid->d_term_prev = 0.0;
+	return pid;
 }
 
 void pid_process(PID_t *pid, float dt, float err, float set, float *out)
@@ -46,6 +47,7 @@ void pid_process(PID_t *pid, float dt, float err, float set, float *out)
 	p_term = pid->Kp*err;
 	i_term += pid->Ki*dt*err;
 	d_term = pid->Kd*(err-(pid->err_prev))/dt;
+	
 	
 	// Integrator windup guard
 	if(i_term > (pid->i_lim)) {
@@ -63,6 +65,7 @@ void pid_process(PID_t *pid, float dt, float err, float set, float *out)
 	pid->err_prev = err;
 	
 	*out = p_term + i_term + d_term;
+	
 }
 
 void pid_reset(PID_t *pid)
@@ -90,5 +93,11 @@ void pid_set_d_filt_gain(PID_t *pid, float d_filt_gain)
 
 int main(void) {
 	printf("BEGIN\n");
-	pid_t *pid = pid_create(float Kp, float Ki, float Kd, float i_lim, float d_filt_gain);
+	PID_t *pid = pid_create(1.0, 1.0, 1.0, 1.0, 0);
+	printf("%f\n",pid->Kp);
+	float out=0.0;
+	while(1) {
+		pid_process(pid, 0.1, 1.0, 0.0, &out);
+		printf("%f\n",out);
+	}
 }

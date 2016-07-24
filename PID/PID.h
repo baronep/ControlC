@@ -18,6 +18,9 @@
  */
 #ifndef PID_H_
 #define PID_H_
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct {
 		float Kp, Ki, Kd;
@@ -35,4 +38,7 @@ void pid_set_gains(PID_t *pid, float Kp, float Ki, float Kd);
 void pid_set_i_lim(PID_t *pid, float i_lim);
 void pid_set_d_filt_gain(PID_t *pid, float d_filt_gain);
 
+#ifdef __cplusplus
+}
+#endif
 #endif
